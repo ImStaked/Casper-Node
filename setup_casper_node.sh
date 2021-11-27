@@ -1,6 +1,6 @@
 echo "Please enter the sudo password"
 
-sudo -u casper echo "It wont work without sudo"
+sudo echo "It wont work without sudo"
 
 sleep 3
 
