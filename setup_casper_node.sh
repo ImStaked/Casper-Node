@@ -38,17 +38,14 @@ git checkout release-1.4.1
 make setup-rs
 make build-client-contracts -j
 
-
-
-echo "end of autosetup manually finish config"
-sleep 6000
-
 sudo -u casper /etc/casper/pull_casper_node_version.sh $CASPER_NETWORK.conf $CASPER_VERSION
 KNOWN_ADDRESSES=$(sudo -u casper cat /etc/casper/$CASPER_VERSION/config.toml | grep known_addresses)
 KNOWN_VALIDATOR_IPS=$(grep -oE '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' <<< "$KNOWN_ADDRESSES")
 IFS=' ' read -r KNOWN_VALIDATOR_IP _REST <<< "$KNOWN_VALIDATOR_IPS"
 echo $KNOWN_VALIDATOR_IP
+echo "  **** Stop. Manually Configure from here please hit cntl+c then follow the instructions below  ****"
 
+sleep 6000
 
 #TRUSTED_HASH=$(casper-client get-block --node-address http://$KNOWN_VALIDATOR_IP:7777 -b 20 | jq -r .result.block.hash | tr -d '\n')
 # if [ "$TRUSTED_HASH" != "null" ]; then sudo -u casper sed -i "/trusted_hash =/c\trusted_hash = '$TRUSTED_HASH'" /etc/casper/$CASPER_VERSION/config.toml; fi
@@ -56,7 +53,6 @@ echo $KNOWN_VALIDATOR_IP
 
 TRUSTED_HASH=6214f009fabbbd601307ab94229d1cf53fcb988f59884e68ab22645ad867dc69
 
-echo "  **** Stop. Manually Configure from here please hit cntl+c then follow the instructions below  ****"
 # Set up keys 
 sudo -u casper nano  > /etc/casper/validator_keys/secret_key.pem
 sudo -u casper nano > /etc/casper/validator_keys/public_key_hex
